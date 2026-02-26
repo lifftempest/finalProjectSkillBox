@@ -4,10 +4,12 @@ public class InputHandler : MonoBehaviour
 {
     public float HorizontalInput { get; private set; }
     public bool JumpPressed { get; private set; }
+    public bool InteractionPressed { get; private set; }
 
     private void Update()
     {
-        HorizontalInput = Input.GetAxis("Horizontal");
-        JumpPressed = Input.GetButtonDown("Jump");
+        HorizontalInput = Input.GetAxis(InputVariables.HORIZONTAL_AXIS);
+        JumpPressed = Input.GetButtonDown(InputVariables.JUMP_BUTTON);
+        InteractionPressed = Input.GetKeyDown(InputVariables.INTERACTION_BUTTON);
     }
 }

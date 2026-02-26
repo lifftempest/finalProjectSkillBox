@@ -120,7 +120,6 @@ public class MovementHandler : MonoBehaviour
         {
             DistanceToGround = 0;
         }
-        Debug.Log(DistanceToGround);
     }
 
     private void CheckGround()

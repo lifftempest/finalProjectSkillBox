@@ -6,6 +6,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private MovementHandler _movementHandler;
     [SerializeField] private InputHandler _inputHandler;
     [SerializeField] private AnimatorHandler _animatorHandler;
+    [SerializeField] private InteractionHandler _interactionHandler;
     [Space(5)]
     [SerializeField] private Transform _playerTransform;
 
@@ -27,9 +28,11 @@ public class PlayerController : MonoBehaviour
         _verticalMoveSpeed = _movementHandler.VerticalMoveSpeed;
         _distanceToGround = _movementHandler.DistanceToGround;
         _isGrounded = _movementHandler.IsGrounded;
-
+        
         Jump();
         UpdatePlayerDirection();
+
+        _interactionHandler.TryInteract(_inputHandler.InteractionPressed);
 
         _animatorHandler.UpdateAnimatorClip(_absHorizontalMoveSpeed, _isGrounded, _verticalMoveSpeed, _distanceToGround);
     }
