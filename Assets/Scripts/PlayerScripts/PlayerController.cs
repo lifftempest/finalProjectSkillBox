@@ -7,6 +7,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private InputHandler _inputHandler;
     [SerializeField] private AnimatorHandler _animatorHandler;
     [SerializeField] private InteractionHandler _interactionHandler;
+    [SerializeField] private HealthComponent _healthComponent;
+    [SerializeField] private AttackerHandler _attackerHandler;
     [Space(5)]
     [SerializeField] private Transform _playerTransform;
 
@@ -18,28 +20,37 @@ public class PlayerController : MonoBehaviour
     private bool _isGrounded;
     private float _distanceToGround;
 
+    private void Awake()
+    {
+        _healthComponent.OnDeath += PlayerDeath;
+    }
+
+    private void OnDisable()
+    {
+        _healthComponent.OnDeath -= PlayerDeath;
+    }
+
     private void Update()
     {
-        _moveInput = _inputHandler.HorizontalInput;
-        _jumpInput = _inputHandler.JumpPressed;
+        if (_healthComponent.IsAlive)
+        {
+            SetVariablesValue();
 
-        _horizontalMoveSpeed = _movementHandler.HorizontalMoveSpeed;
-        _absHorizontalMoveSpeed = _movementHandler.AbsHorizontalMS;
-        _verticalMoveSpeed = _movementHandler.VerticalMoveSpeed;
-        _distanceToGround = _movementHandler.DistanceToGround;
-        _isGrounded = _movementHandler.IsGrounded;
-        
-        Jump();
-        UpdatePlayerDirection();
+            Jump();
+            UpdatePlayerDirection();
 
-        _interactionHandler.TryInteract(_inputHandler.InteractionPressed);
+            OnlyGroundedActions();
 
-        _animatorHandler.UpdateAnimatorClip(_absHorizontalMoveSpeed, _isGrounded, _verticalMoveSpeed, _distanceToGround);
+            _animatorHandler.UpdateAnimatorClip(_absHorizontalMoveSpeed, _isGrounded, _verticalMoveSpeed, _distanceToGround);
+        }
     }
 
     private void FixedUpdate()
     {
-        _movementHandler.HandleMovement(_moveInput);
+        if (_healthComponent.IsAlive)
+        {
+            _movementHandler.HandleMovement(_moveInput);
+        }
     }
 
     private void Jump()
@@ -58,5 +69,37 @@ public class PlayerController : MonoBehaviour
         {
             _playerTransform.localScale = new Vector2(-1, _playerTransform.localScale.y);
         }
+    }
+
+    private void OnlyGroundedActions()
+    {
+        if (_isGrounded)
+        {
+            _attackerHandler.Shoot(_inputHandler.AttackButtonPressed);
+            _interactionHandler.TryInteract(_inputHandler.InteractionPressed);
+        }
+    }
+
+    private void SetVariablesValue()
+    {
+        _moveInput = _inputHandler.HorizontalInput;
+        _jumpInput = _inputHandler.JumpPressed;
+
+        _horizontalMoveSpeed = _movementHandler.HorizontalMoveSpeed;
+        _absHorizontalMoveSpeed = _movementHandler.AbsHorizontalMS;
+        _verticalMoveSpeed = _movementHandler.VerticalMoveSpeed;
+        _distanceToGround = _movementHandler.DistanceToGround;
+        _isGrounded = _movementHandler.IsGrounded;
+    }
+
+    private void PlayerDeath()
+    {
+        print("DEAD");
+        _movementHandler.enabled = false;
+        _inputHandler.enabled = false;
+        _interactionHandler.enabled = false;
+        _healthComponent.enabled = false;
+        _animatorHandler.SetDeathTrigger();
+        EventManager.InvokePlayerDeathEvents();
     }
 }

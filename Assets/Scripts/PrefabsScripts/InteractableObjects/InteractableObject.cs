@@ -47,6 +47,8 @@ public abstract class InteractableObject : MonoBehaviour, IInteractable
             ExecuteInteraction();
         }
     }
-
+    /// <summary>
+    /// Необходимо определить в реализации останется ли объект интерактивным или нет
+    /// </summary>
     protected abstract void ExecuteInteraction();
 }

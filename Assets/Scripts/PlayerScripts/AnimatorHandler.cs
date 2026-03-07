@@ -9,11 +9,13 @@ public class AnimatorHandler : MonoBehaviour
     [SerializeField] private string _airSpeedParam = "verticalVelocity";
     [SerializeField] private string _distanceToGroundParam = "distanceToGround";
     [SerializeField] private string _groundedParam = "isGrounded";
+    [SerializeField] private string _isDeadParam = "isDead";
 
     private int _speedParamHash;
     private int _airSpeedParamHash;
     private int _distanceToGroundParamHash;
     private int _groundParamHash;
+    private int _deadParamHash;
 
 
     private void Awake()
@@ -22,6 +24,7 @@ public class AnimatorHandler : MonoBehaviour
         _airSpeedParamHash = Animator.StringToHash(_airSpeedParam);
         _distanceToGroundParamHash = Animator.StringToHash(_distanceToGroundParam);
         _groundParamHash = Animator.StringToHash(_groundedParam);
+        _deadParamHash = Animator.StringToHash(_isDeadParam);
     }
 
     public void UpdateAnimatorClip(float groundSpeed, bool isGrounded, float airSpeed, float distanceToGround)
@@ -30,5 +33,10 @@ public class AnimatorHandler : MonoBehaviour
         _animator.SetFloat(_airSpeedParamHash, airSpeed);
         _animator.SetFloat(_distanceToGroundParamHash, distanceToGround);
         _animator.SetBool(_groundParamHash, isGrounded);
+    }
+
+    public void SetDeathTrigger()
+    {
+        _animator.SetTrigger(_deadParamHash);
     }
 }
