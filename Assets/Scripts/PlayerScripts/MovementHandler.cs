@@ -33,6 +33,7 @@ public class MovementHandler : MonoBehaviour
     public float AbsHorizontalMS => Mathf.Abs(HorizontalMoveSpeed);
     public float DistanceToGround { get; private set; }
     public bool IsGrounded => _isGrounded;
+
     private void Awake()
     {
         _rigidBody.gravityScale = _gravityScale;

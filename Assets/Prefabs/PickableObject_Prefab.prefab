@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7916218343786492383}
   - component: {fileID: 247783582075628615}
+  - component: {fileID: -20659738526157631}
   - component: {fileID: 7741185369540116079}
   - component: {fileID: 4250336283096187352}
   m_Layer: 0
@@ -50,6 +51,20 @@ MonoBehaviour:
   _scriptableObjectData: {fileID: 0}
   _spriteRenderer: {fileID: 1610389787723739095}
   _source: {fileID: 4250336283096187352}
+  _scoreComponent: {fileID: -20659738526157631}
+--- !u!114 &-20659738526157631
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 740846687809554141}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2826eb5d0d109354c99dc58df0ad3afe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _scoreValue: 0
 --- !u!58 &7741185369540116079
 CircleCollider2D:
   m_ObjectHideFlags: 0

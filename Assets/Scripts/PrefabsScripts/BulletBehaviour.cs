@@ -44,7 +44,6 @@ public class BulletBehaviour : MonoBehaviour
 
     public void FireBullet(Transform transform)
     {
-        print("Step 5");
         _rigidBody.linearVelocity = transform.lossyScale.x * _bulletSpeed * transform.right;
 
     }
@@ -56,7 +55,6 @@ public class BulletBehaviour : MonoBehaviour
             screenPosition.y < 0 - _cameraBufferValue || screenPosition.y > 1 + _cameraBufferValue)
         {
             ReturnToPool();
-            print("miss");
         }
     }
 

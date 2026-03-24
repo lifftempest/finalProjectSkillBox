@@ -19,6 +19,7 @@ public class PlayerController : MonoBehaviour
     private float _verticalMoveSpeed;
     private bool _isGrounded;
     private float _distanceToGround;
+    private bool _isShooting;
 
     private void Awake()
     {
@@ -47,7 +48,7 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (_healthComponent.IsAlive)
+        if (_healthComponent.IsAlive && !_isShooting)
         {
             _movementHandler.HandleMovement(_moveInput);
         }
@@ -75,9 +76,14 @@ public class PlayerController : MonoBehaviour
     {
         if (_isGrounded)
         {
-            _attackerHandler.Shoot(_inputHandler.AttackButtonPressed);
+            Shoot();
             _interactionHandler.TryInteract(_inputHandler.InteractionPressed);
         }
+    }
+
+    private void Shoot()
+    {
+        _attackerHandler.Shoot(_inputHandler.AttackButtonPressed, out _isShooting);
     }
 
     private void SetVariablesValue()

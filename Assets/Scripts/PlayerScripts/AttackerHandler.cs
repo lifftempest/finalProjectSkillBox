@@ -27,16 +27,12 @@ public class AttackerHandler: MonoBehaviour
 
     private void ExecuteShooting()
     {
-        print("Step 2");
         if (_currentMagazineSize > 0)
         {
-            print("Step 3");
             if (_currentDelayTime <= 0)
             {
-                print("Step 4");
                 var bullet = _bulletPool.GetBullet();
                 bullet.gameObject.transform.position = _firePosition.position;
-                //bullet.gameObject.transform.localRotation = Quaternion.identity;
                 bullet.transform.parent = null;
                 bullet.SetActive(true);
                 bullet.GetComponent<BulletBehaviour>().FireBullet(_firePosition);
@@ -48,12 +44,16 @@ public class AttackerHandler: MonoBehaviour
         
     }
 
-    public void Shoot(bool isShootButtonPressed)
+    public void Shoot(bool isShootButtonPressed, out bool isShooting)
     {
-        print("Step 1");
         if (isShootButtonPressed)
         {
             ExecuteShooting();
+            isShooting = true;
+        }
+        else
+        {
+            isShooting = false;
         }
     }
 }
