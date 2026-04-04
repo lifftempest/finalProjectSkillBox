@@ -20,6 +20,12 @@ public class ScoreHandler : MonoBehaviour
 
         Instance = this;
         _currentScore = 0;
+        
+        Invoke("Print", 1f);
+    }
+
+    private void Print()
+    {
         _overallScore = GetOverallScore();
         print(_overallScore);
     }

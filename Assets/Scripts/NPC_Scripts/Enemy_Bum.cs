@@ -11,9 +11,13 @@ public class Enemy_Bum : NPCbase
     [SerializeField] private string _isIdleTrigger;
     [SerializeField] private string _isStopRunTrigger;
     [Space(5), Header("Components")]
+    [SerializeField] private SpriteRenderer _spriteRenderer;
+    [SerializeField] private HealthComponent _healthComponent;
+    [SerializeField] private ScoreComponent _scoreComponent;
     [SerializeField] private Transform _attackPoint;
-    [SerializeField] private Vector2 _attackBox;
+    [SerializeField] private Collider2D _collider;
     [SerializeField] private Rigidbody2D _rigidbody;
+    [SerializeField] private Vector2 _attackBox;
     [Space(5), Header("Parameters")]
     [SerializeField] private float _moveSpeed;
     [SerializeField] private int _dealtDamage;
@@ -28,6 +32,8 @@ public class Enemy_Bum : NPCbase
     private int _idleTriggerHash;
     private int _stopRunHash;
     private bool _isMoving = false;
+    private Color _damagedSpriteColor = new Color(3, 0.5f, 0.5f, 1);
+    private Color _standartColor = new Color(1, 1, 1, 1);
 
     protected override void Awake()
     {
@@ -35,7 +41,18 @@ public class Enemy_Bum : NPCbase
         _startPosition = transform.position;
         _startScale = transform.localScale;
 
+        _healthComponent.OnDeath += DeathBehaviour;
+        _healthComponent.OnHealthChanged += TakeDamage;
+
         SetHashValues();
+    }
+
+    protected override void OnDestroy()
+    {
+        base.OnDestroy();
+
+        _healthComponent.OnDeath -= DeathBehaviour;
+        _healthComponent.OnHealthChanged -= TakeDamage;
     }
 
     protected override void Update()
@@ -52,32 +69,40 @@ public class Enemy_Bum : NPCbase
 
     protected override void ExecuteIdleStateBehaviour()
     {
-        if (Vector2.Distance(transform.position, _startPosition) > 0.1f)
+        if (_healthComponent.IsAlive)
         {
-            _targetPosition = _startPosition;
-            StartCoroutine(IdleBehaviour());
+            if (Vector2.Distance(transform.position, _startPosition) > 0.1f)
+            {
+                _targetPosition = _startPosition;
+                StartCoroutine(IdleBehaviour());
 
+            }
+            if (!_Animator.GetCurrentAnimatorStateInfo(0).IsName("Bum_Idle"))
+                _Animator.SetTrigger(_isIdleTrigger);
         }
-        if (!_Animator.GetCurrentAnimatorStateInfo(0).IsName("Bum_Idle"))
-            _Animator.SetTrigger(_isIdleTrigger);
     }
     protected override void ExecutePlayerSpottedBehaviour()
     {
-        _Animator.SetTrigger(_spottedTriggerHash);
+        if (_healthComponent.IsAlive)
+        {
+            _Animator.SetTrigger(_spottedTriggerHash);
+        }
     }
     protected override void ExecuteTriggeredBehaviour()
     {
-        _targetPosition = _Player.position;
+        if (_healthComponent.IsAlive)
+        {
+            _targetPosition = _Player.position;
 
-        StartCoroutine(MoveBumToTarget(_targetPosition));
+            StartCoroutine(MoveBumToTarget(_targetPosition));
+        }
     }
     protected override void ExecuteInteractionBehaviour()
     {
-        //в аниматоре метод DealDamage
-        //_IsAutoStateDetection = false;
-        //_Animator.SetTrigger(_interactionRadiusHash);
-
-        StartCoroutine(AttackFunc());
+        if (_healthComponent.IsAlive)
+        {
+            StartCoroutine(AttackFunc()); 
+        }
     }
 
     private IEnumerator IdleBehaviour()
@@ -100,8 +125,9 @@ public class Enemy_Bum : NPCbase
         yield return new WaitUntil(() => _Animator.GetCurrentAnimatorStateInfo(0).IsName("Bum_Run"));
         while (Vector2.Distance(transform.position, targetPosition) > 0.1f && _isMoving)
         {
-            transform.position = Vector2.MoveTowards(transform.position, targetPosition, _moveSpeed * Time.deltaTime);
-            
+            //transform.position = Vector2.MoveTowards(transform.position, targetPosition, _moveSpeed * Time.deltaTime);
+            Vector2 newPosition = Vector2.MoveTowards(transform.position, targetPosition, _moveSpeed * Time.fixedDeltaTime);
+            _rigidbody.MovePosition(newPosition);
             yield return null;
         }
         _isMoving = false;
@@ -116,6 +142,27 @@ public class Enemy_Bum : NPCbase
         //в аниматоре метод DealDamage
         _IsAutoStateDetection = false;
         _Animator.SetTrigger(_interactionRadiusHash);
+    }
+
+    private void TakeDamage()
+    {
+        StartCoroutine(SpriteColorDamaged());
+        if (CurrentState == NPC_States.PlayerSpotted || CurrentState == NPC_States.Idle)
+        {
+            _Animator.SetTrigger(_triggeredTriggerHash);
+            ChangeBehaviourState(NPC_States.Triggered);
+        }
+        print(_healthComponent.CurrentHealth);
+    }
+
+    private void DeathBehaviour()
+    {
+        StopAllCoroutines();
+        _Animator.SetTrigger("isDead");
+        _healthComponent.enabled = false;
+        _collider.excludeLayers += LayerMask.GetMask("Bullet", "Player");
+        ScoreHandler.Instance.AddScore(_scoreComponent.ScoreValue);
+        Destroy(gameObject, 2f);
     }
 
     protected void DealDamage()
@@ -145,6 +192,29 @@ public class Enemy_Bum : NPCbase
                 _IsAutoStateDetection = true;
             }
         }
+    }
+
+    private IEnumerator SpriteColorDamaged()
+    {
+        float duration = 0.25f;
+        float elapsed = 0f;
+        while (elapsed < duration)
+        {
+            elapsed += Time.deltaTime;
+            float currentTime = elapsed / duration;
+            _spriteRenderer.color = Color.Lerp(_spriteRenderer.color, _damagedSpriteColor, currentTime);
+            yield return null;
+        }
+        _spriteRenderer.color = _damagedSpriteColor;
+        elapsed = 0f;
+        while (elapsed < duration)
+        {
+            elapsed += Time.deltaTime;
+            float currentTime = elapsed / duration;
+            _spriteRenderer.color = Color.Lerp(_spriteRenderer.color, _standartColor, currentTime);
+            yield return null;
+        }
+        _spriteRenderer.color = _standartColor;
     }
 
     private void StopMoving()

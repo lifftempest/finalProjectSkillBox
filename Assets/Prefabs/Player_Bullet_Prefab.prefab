@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 7105077195500107730}
   - component: {fileID: 4722838393988974793}
   - component: {fileID: 1553786670889283705}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Player_Bullet_Prefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -130,7 +130,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6345677122242521275}
   - component: {fileID: 3693179024731645958}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Player_Bullet_Mesh
   m_TagString: Untagged
   m_Icon: {fileID: 0}
