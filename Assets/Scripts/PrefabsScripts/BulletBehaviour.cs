@@ -17,7 +17,7 @@ public class BulletBehaviour : MonoBehaviour
 
     private void Start()
     {
-        _bulletPool = FindAnyObjectByType<BulletPool>();
+        _bulletPool = FindAnyObjectByType<PlayerController>().gameObject.GetComponentInChildren<BulletPool>();
         SetUpBulletSprite();
         _mainCamera = Camera.main;
     }
@@ -35,7 +35,7 @@ public class BulletBehaviour : MonoBehaviour
             if (collision.gameObject.TryGetComponent<HealthComponent>(out var health))
             {
                 health.TakeDamage(_bulletDamage);
-                Debug.Log("Shot " + health.CurrentHealth);
+                print($"Нанесен урон {health.name}");
             }
 
             ReturnToPool();
@@ -45,7 +45,6 @@ public class BulletBehaviour : MonoBehaviour
     public void FireBullet(Transform transform)
     {
         _rigidBody.linearVelocity = transform.lossyScale.x * _bulletSpeed * transform.right;
-
     }
 
     private void CheckScreenPosition()

@@ -27,7 +27,7 @@ public class ScoreHandler : MonoBehaviour
     private void Print()
     {
         _overallScore = GetOverallScore();
-        print(_overallScore);
+        print($"Максимальное количество очков: {_overallScore}");
     }
 
     public int GetOverallScore()
@@ -38,6 +38,7 @@ public class ScoreHandler : MonoBehaviour
     public void AddScore(int scoreValue)
     {
         _currentScore += scoreValue;
+        print("Добавлены очки");
         OnScoreChanged?.Invoke(_currentScore);
     }
 

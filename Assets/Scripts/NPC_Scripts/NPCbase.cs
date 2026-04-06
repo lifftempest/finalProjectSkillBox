@@ -35,9 +35,9 @@ public abstract class NPCbase : MonoBehaviour
 
     protected virtual void Update()
     {
-        Debug.DrawRay(transform.position, transform.right * _distanceToSpottedState, Color.blue);
-        Debug.DrawRay(transform.position, transform.right * _distanceToTriggeredState, Color.yellow);
-        Debug.DrawRay(transform.position, transform.right * _distanceToInteractionState, Color.red);
+        Debug.DrawRay(transform.position, transform.right * _distanceToSpottedState * transform.lossyScale.x, Color.blue);
+        Debug.DrawRay(transform.position, transform.right * _distanceToTriggeredState * transform.lossyScale.x, Color.yellow);
+        Debug.DrawRay(transform.position, transform.right * _distanceToInteractionState * transform.lossyScale.x, Color.red);
 
         SetDestinationVars();
 

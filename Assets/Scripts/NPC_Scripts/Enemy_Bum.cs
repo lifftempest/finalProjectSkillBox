@@ -32,8 +32,7 @@ public class Enemy_Bum : NPCbase
     private int _idleTriggerHash;
     private int _stopRunHash;
     private bool _isMoving = false;
-    private Color _damagedSpriteColor = new Color(3, 0.5f, 0.5f, 1);
-    private Color _standartColor = new Color(1, 1, 1, 1);
+    
 
     protected override void Awake()
     {
@@ -144,15 +143,15 @@ public class Enemy_Bum : NPCbase
         _Animator.SetTrigger(_interactionRadiusHash);
     }
 
-    private void TakeDamage()
+    private void TakeDamage(float damage)
     {
-        StartCoroutine(SpriteColorDamaged());
+        StartCoroutine(SpriteDamagedColorChanger.FlashSprite(_spriteRenderer));
         if (CurrentState == NPC_States.PlayerSpotted || CurrentState == NPC_States.Idle)
         {
             _Animator.SetTrigger(_triggeredTriggerHash);
             ChangeBehaviourState(NPC_States.Triggered);
         }
-        print(_healthComponent.CurrentHealth);
+        print($"Enemy_Bum health: {_healthComponent.CurrentHealth}/{_healthComponent.MaxHealth}");
     }
 
     private void DeathBehaviour()
@@ -192,29 +191,6 @@ public class Enemy_Bum : NPCbase
                 _IsAutoStateDetection = true;
             }
         }
-    }
-
-    private IEnumerator SpriteColorDamaged()
-    {
-        float duration = 0.25f;
-        float elapsed = 0f;
-        while (elapsed < duration)
-        {
-            elapsed += Time.deltaTime;
-            float currentTime = elapsed / duration;
-            _spriteRenderer.color = Color.Lerp(_spriteRenderer.color, _damagedSpriteColor, currentTime);
-            yield return null;
-        }
-        _spriteRenderer.color = _damagedSpriteColor;
-        elapsed = 0f;
-        while (elapsed < duration)
-        {
-            elapsed += Time.deltaTime;
-            float currentTime = elapsed / duration;
-            _spriteRenderer.color = Color.Lerp(_spriteRenderer.color, _standartColor, currentTime);
-            yield return null;
-        }
-        _spriteRenderer.color = _standartColor;
     }
 
     private void StopMoving()

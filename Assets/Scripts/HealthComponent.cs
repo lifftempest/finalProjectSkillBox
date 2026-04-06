@@ -9,10 +9,11 @@ public class HealthComponent : MonoBehaviour
     private bool _isAlive = true;
 
     public Action OnDeath;
-    public Action OnHealthChanged;
+    public Action<float> OnHealthChanged;
 
     public bool IsAlive => _isAlive;
     public float CurrentHealth => _currentHealth;
+    public float MaxHealth => _maxHealth;  
 
     private void Awake()
     {
@@ -24,7 +25,7 @@ public class HealthComponent : MonoBehaviour
         if (_isAlive)
         {
             _currentHealth -= damage;
-            OnHealthChanged?.Invoke();
+            OnHealthChanged?.Invoke(_currentHealth);
             if (_currentHealth <= 0)
             {
                 _isAlive = false;

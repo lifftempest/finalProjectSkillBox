@@ -38,8 +38,26 @@ TagManager:
   - 
   - 
   m_SortingLayers:
+  - name: SuperBackground
+    uniqueID: 4080110971
+    locked: 0
+  - name: Background 2
+    uniqueID: 1425887147
+    locked: 0
+  - name: Background 1
+    uniqueID: 685251293
+    locked: 0
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Foreground 1
+    uniqueID: 642439839
+    locked: 0
+  - name: Foreground 2
+    uniqueID: 2338050265
+    locked: 0
+  - name: SuperForeground
+    uniqueID: 1234407207
     locked: 0
   m_RenderingLayers:
   - Default

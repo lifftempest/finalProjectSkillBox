@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 public class AttackerHandler: MonoBehaviour
 {
@@ -9,8 +10,13 @@ public class AttackerHandler: MonoBehaviour
     [SerializeField] private float _shootDelay;
     [SerializeField] private int _magazineSize;
 
+    public Action<int> OnShoot;
+
     private float _currentDelayTime;
     private int _currentMagazineSize;
+
+    public int CurrentMagazine => _currentMagazineSize;
+    public int MaxMagazine => _magazineSize;
 
     private void Awake()
     {
@@ -39,6 +45,7 @@ public class AttackerHandler: MonoBehaviour
 
                 _currentDelayTime = _shootDelay;
                 _currentMagazineSize--;
+                OnShoot?.Invoke(_currentMagazineSize);
             }
         }
         

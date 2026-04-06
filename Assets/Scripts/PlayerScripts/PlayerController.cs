@@ -3,6 +3,7 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     [Header("Components")]
+    [SerializeField] private SpriteRenderer _spriteRenderer;
     [SerializeField] private MovementHandler _movementHandler;
     [SerializeField] private InputHandler _inputHandler;
     [SerializeField] private AnimatorHandler _animatorHandler;
@@ -24,11 +25,13 @@ public class PlayerController : MonoBehaviour
     private void Awake()
     {
         _healthComponent.OnDeath += PlayerDeath;
+        _healthComponent.OnHealthChanged += TakeDamage;
     }
 
     private void OnDisable()
     {
         _healthComponent.OnDeath -= PlayerDeath;
+        _healthComponent.OnHealthChanged += TakeDamage;
     }
 
     private void Update()
@@ -96,6 +99,11 @@ public class PlayerController : MonoBehaviour
         _verticalMoveSpeed = _movementHandler.VerticalMoveSpeed;
         _distanceToGround = _movementHandler.DistanceToGround;
         _isGrounded = _movementHandler.IsGrounded;
+    }
+
+    private void TakeDamage(float damage)
+    {
+        StartCoroutine(SpriteDamagedColorChanger.FlashSprite(_spriteRenderer));
     }
 
     private void PlayerDeath()
