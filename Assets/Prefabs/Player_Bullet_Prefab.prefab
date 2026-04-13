@@ -54,7 +54,7 @@ MonoBehaviour:
   _spriteRenderer: {fileID: 3693179024731645958}
   _rigidBody: {fileID: 4722838393988974793}
   _bulletSpeed: 22
-  _bulletDamage: 2
+  _bulletDamage: 1
   _cameraBufferValue: 0.02
 --- !u!50 &4722838393988974793
 Rigidbody2D:

@@ -49,7 +49,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _rigidBody: {fileID: 742222155906191236}
   _bulletSpeed: 27
-  _bulletDamage: 10
+  _bulletDamage: 15
+  _bulletShotClip: {fileID: 8300000, guid: 0efa3a1875bf0d546a8ba750bdb4f25f, type: 3}
 --- !u!50 &742222155906191236
 Rigidbody2D:
   serializedVersion: 5

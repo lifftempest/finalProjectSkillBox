@@ -134,7 +134,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 38b7dfcd21ef3904dab4d8d8326a41d0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _fireDoDamageClip: {fileID: 8300000, guid: f80b445ff9b1cba469be300a2a6f8727, type: 3}
   _damage: 20
+  _launchPower: 12
+  _launchAngle: 45
 --- !u!95 &3336734575938293408
 Animator:
   serializedVersion: 7
@@ -173,7 +176,7 @@ BoxCollider2D:
     m_Bits: 4294967295
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 1
+    m_Bits: 129
   m_LayerOverridePriority: 0
   m_ForceSendLayers:
     serializedVersion: 2

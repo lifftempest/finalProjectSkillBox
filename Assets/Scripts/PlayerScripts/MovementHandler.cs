@@ -92,6 +92,19 @@ public class MovementHandler : MonoBehaviour
         _rigidBody.linearVelocity = new Vector2(_rigidBody.linearVelocity.x, 0f);
         _rigidBody.AddForce(Vector2.up * _jumpForce, ForceMode2D.Impulse);
     }
+    /// <summary>
+    /// Для получения урона от огня
+    /// </summary>
+    /// <param name="firePoisiton"></param>
+    public void PushPlayer(Transform firePoisiton, float lauchAngle, float launchPower)
+    {
+        Vector2 horizontalDirection = (transform.position - firePoisiton.position).normalized;
+        var angle = lauchAngle * Mathf.Deg2Rad;
+        Vector2 launchVelocity = horizontalDirection * launchPower * Mathf.Cos(angle);
+        launchVelocity.y = launchPower * Mathf.Sin(angle);
+        _rigidBody.linearVelocity = Vector2.zero;
+        _rigidBody.linearVelocity = launchVelocity;
+    }
 
     private void HandleFallGravity()
     {

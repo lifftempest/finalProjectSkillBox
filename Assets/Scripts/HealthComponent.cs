@@ -33,4 +33,13 @@ public class HealthComponent : MonoBehaviour
             }
         }
     }
+
+    public void Heal()
+    {
+        if (_currentHealth != _maxHealth)
+        {
+            _currentHealth = _maxHealth;
+            OnHealthChanged?.Invoke(_currentHealth);
+        }
+    }
 }

@@ -10,6 +10,7 @@ public class Enemy_Robot : NPCbase
     [SerializeField] private string _trigerredTriggerName;
     [SerializeField] private string _interactionTriggerName;
     [Space(5), Header("Components")]
+    [SerializeField] private Robot_Audio _robotAudio;
     [SerializeField] private ScoreComponent _scoreComponent;
     [SerializeField] private Collider2D _robotCollider;
     [SerializeField] private SpriteRenderer _spriteRenderer;
@@ -48,10 +49,6 @@ public class Enemy_Robot : NPCbase
     {
         base.Update();
 
-        if (_currentFireRate > 0)
-        {
-            _currentFireRate -= Time.deltaTime;
-        }
     }
 
     protected override void ExecuteIdleStateBehaviour()
@@ -102,6 +99,7 @@ public class Enemy_Robot : NPCbase
     private void TakeDamage(float damage)
     {
         StartCoroutine(SpriteDamagedColorChanger.FlashSprite(_spriteRenderer));
+        AudioHandler.Instance.PlaySfx(_robotAudio.HurtClip);
     }
 
     private IEnumerator Fire()
@@ -121,6 +119,7 @@ public class Enemy_Robot : NPCbase
             }
             else
             {
+                _currentFireRate -= Time.deltaTime;
                 yield return null;
             }
         }

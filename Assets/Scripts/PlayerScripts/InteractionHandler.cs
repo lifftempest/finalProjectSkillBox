@@ -9,13 +9,14 @@ public class InteractionHandler : MonoBehaviour
     {
         if (interactInput)
         {
-            print(123);
+            print("Tried to Interact");
             var hits = Physics2D.CircleCastAll(_interactionOrigin.position, _interactionRadius, Vector2.zero);
             foreach (var hit in hits)
             {
                 if (hit.collider.TryGetComponent<IInteractable>(out var item))
                 {
                     item.Interact();
+                    print("interacted");
                 }
             }
         }

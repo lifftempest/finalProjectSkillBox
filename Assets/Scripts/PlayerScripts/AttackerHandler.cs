@@ -31,7 +31,7 @@ public class AttackerHandler: MonoBehaviour
         }
     }
 
-    private void ExecuteShooting()
+    private void ExecuteShooting(AudioClip shootClip, AudioClip emptyMagazine)
     {
         if (_currentMagazineSize > 0)
         {
@@ -42,20 +42,31 @@ public class AttackerHandler: MonoBehaviour
                 bullet.transform.parent = null;
                 bullet.SetActive(true);
                 bullet.GetComponent<BulletBehaviour>().FireBullet(_firePosition);
+                AudioHandler.Instance.PlaySfx(shootClip);
 
                 _currentDelayTime = _shootDelay;
                 _currentMagazineSize--;
                 OnShoot?.Invoke(_currentMagazineSize);
             }
         }
-        
+        if (_currentMagazineSize <= 0 && _currentDelayTime <= 0)
+        {
+            AudioHandler.Instance.PlaySfx(emptyMagazine);
+            _currentDelayTime = _shootDelay;
+        }
     }
 
-    public void Shoot(bool isShootButtonPressed, out bool isShooting)
+    public void ReloadMagazine()
+    {
+        _currentMagazineSize = _magazineSize;
+        OnShoot?.Invoke(_currentMagazineSize);
+    }
+
+    public void Shoot(bool isShootButtonPressed, out bool isShooting, AudioClip shootClip, AudioClip emptyMagazine)
     {
         if (isShootButtonPressed)
         {
-            ExecuteShooting();
+            ExecuteShooting(shootClip, emptyMagazine);
             isShooting = true;
         }
         else

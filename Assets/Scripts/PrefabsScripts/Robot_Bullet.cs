@@ -5,6 +5,7 @@ public class Robot_Bullet : MonoBehaviour
     [SerializeField] private Rigidbody2D _rigidBody;
     [SerializeField] private float _bulletSpeed;
     [SerializeField] private float _bulletDamage;
+    [Space(5), SerializeField] private AudioClip _bulletShotClip;
 
     private BulletPool _bulletPool;
 
@@ -25,6 +26,7 @@ public class Robot_Bullet : MonoBehaviour
         {
             ReturnToPool();
         }
+        AudioHandler.Instance.PlaySfx(_bulletShotClip);
     }
 
     public void FireBullet(Transform transform)

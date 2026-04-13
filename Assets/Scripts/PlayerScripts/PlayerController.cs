@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
@@ -10,6 +11,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private InteractionHandler _interactionHandler;
     [SerializeField] private HealthComponent _healthComponent;
     [SerializeField] private AttackerHandler _attackerHandler;
+    [SerializeField] private PlayerAudio_Handler _playerAudioHandler;
     [Space(5)]
     [SerializeField] private Transform _playerTransform;
 
@@ -21,6 +23,7 @@ public class PlayerController : MonoBehaviour
     private bool _isGrounded;
     private float _distanceToGround;
     private bool _isShooting;
+    private bool _isMovingEnable = true;
 
     private void Awake()
     {
@@ -53,6 +56,7 @@ public class PlayerController : MonoBehaviour
     {
         if (_healthComponent.IsAlive && !_isShooting)
         {
+            if(_isMovingEnable)
             _movementHandler.HandleMovement(_moveInput);
         }
     }
@@ -86,7 +90,18 @@ public class PlayerController : MonoBehaviour
 
     private void Shoot()
     {
-        _attackerHandler.Shoot(_inputHandler.AttackButtonPressed, out _isShooting);
+        _attackerHandler.Shoot(_inputHandler.AttackButtonPressed, out _isShooting, _playerAudioHandler.FireClip, _playerAudioHandler.EmptyMagazineClickClip);
+    }
+
+    public IEnumerator ExecutePushPlayer(Transform firePosition, float lauchAngle, float launchPower)
+    {
+        if (_healthComponent.IsAlive)
+        {
+            _isMovingEnable = false;
+            _movementHandler.PushPlayer(firePosition, lauchAngle, launchPower);
+            yield return new WaitForSeconds(0.25f);
+            _isMovingEnable = true;
+        }
     }
 
     private void SetVariablesValue()
@@ -104,6 +119,7 @@ public class PlayerController : MonoBehaviour
     private void TakeDamage(float damage)
     {
         StartCoroutine(SpriteDamagedColorChanger.FlashSprite(_spriteRenderer));
+        _playerAudioHandler.PlayHurtClip();
     }
 
     private void PlayerDeath()

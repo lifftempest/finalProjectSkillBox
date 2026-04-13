@@ -50,14 +50,11 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
-  - name: Foreground 1
+  - name: Player
     uniqueID: 642439839
     locked: 0
-  - name: Foreground 2
+  - name: Foreground 1
     uniqueID: 2338050265
-    locked: 0
-  - name: SuperForeground
-    uniqueID: 1234407207
     locked: 0
   m_RenderingLayers:
   - Default

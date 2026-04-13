@@ -14,6 +14,7 @@ public class Enemy_Bum : NPCbase
     [SerializeField] private SpriteRenderer _spriteRenderer;
     [SerializeField] private HealthComponent _healthComponent;
     [SerializeField] private ScoreComponent _scoreComponent;
+    [SerializeField] private Bum_Audio _bumAudio;
     [SerializeField] private Transform _attackPoint;
     [SerializeField] private Collider2D _collider;
     [SerializeField] private Rigidbody2D _rigidbody;
@@ -146,6 +147,7 @@ public class Enemy_Bum : NPCbase
     private void TakeDamage(float damage)
     {
         StartCoroutine(SpriteDamagedColorChanger.FlashSprite(_spriteRenderer));
+        _bumAudio.PlayHurtClip();
         if (CurrentState == NPC_States.PlayerSpotted || CurrentState == NPC_States.Idle)
         {
             _Animator.SetTrigger(_triggeredTriggerHash);
@@ -170,6 +172,7 @@ public class Enemy_Bum : NPCbase
         if (hit != false)
         {
             print(hit.transform.gameObject.name);
+            AudioHandler.Instance.PlaySfx(_bumAudio.HitClip);
             if (hit.transform.TryGetComponent<HealthComponent>(out var component))
             {
                 if (component.CompareTag("Player"))
@@ -178,6 +181,7 @@ public class Enemy_Bum : NPCbase
                 }
             }
         }
+        else { AudioHandler.Instance.PlaySfx(_bumAudio.AttackMissClip); }
         if (_Animator.GetCurrentAnimatorStateInfo(0).IsName("Bum_Attack3"))
         {
             CheckState();
