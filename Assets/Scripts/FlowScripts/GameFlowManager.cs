@@ -89,7 +89,6 @@ public class GameFlowManager : MonoBehaviour
         else
         {
             SettingsButtonAction(false);
-            //HideCursor();
         }
     }
 

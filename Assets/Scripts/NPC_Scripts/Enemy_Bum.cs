@@ -125,7 +125,7 @@ public class Enemy_Bum : NPCbase
         yield return new WaitUntil(() => _Animator.GetCurrentAnimatorStateInfo(0).IsName("Bum_Run"));
         while (Vector2.Distance(transform.position, targetPosition) > 0.1f && _isMoving)
         {
-            //transform.position = Vector2.MoveTowards(transform.position, targetPosition, _moveSpeed * Time.deltaTime);
+            
             Vector2 newPosition = Vector2.MoveTowards(transform.position, targetPosition, _moveSpeed * Time.fixedDeltaTime);
             _rigidbody.MovePosition(newPosition);
             yield return null;
@@ -153,10 +153,7 @@ public class Enemy_Bum : NPCbase
             _Animator.SetTrigger(_triggeredTriggerHash);
             ChangeBehaviourState(NPC_States.Triggered);
         }
-        if (CurrentState == NPC_States.Triggered)
-        {
-            ExecuteTriggeredBehaviour();
-        }
+        
         print($"Enemy_Bum health: {_healthComponent.CurrentHealth}/{_healthComponent.MaxHealth}");
     }
 
