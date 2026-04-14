@@ -58,7 +58,7 @@ public class Enemy_Bum : NPCbase
     protected override void Update()
     {
         base.Update();
-
+        print(CurrentState);
     }
 
     private void OnDrawGizmosSelected()
@@ -152,6 +152,10 @@ public class Enemy_Bum : NPCbase
         {
             _Animator.SetTrigger(_triggeredTriggerHash);
             ChangeBehaviourState(NPC_States.Triggered);
+        }
+        if (CurrentState == NPC_States.Triggered)
+        {
+            ExecuteTriggeredBehaviour();
         }
         print($"Enemy_Bum health: {_healthComponent.CurrentHealth}/{_healthComponent.MaxHealth}");
     }

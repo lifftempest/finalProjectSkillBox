@@ -16,6 +16,7 @@ public class ScoreComponent : MonoBehaviour
 
     private IEnumerator InitializeOveralScore()
     {
+        OverallScoreValue = 0;
         yield return _initHold;
         OverallScoreValue += ScoreValue;
     }
@@ -24,6 +25,7 @@ public class ScoreComponent : MonoBehaviour
     {
         return OverallScoreValue;
     }
+
     /// <summary>
     /// !!! Только в случае если очки определяются не в ScoreComponent
     /// </summary>

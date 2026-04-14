@@ -26,13 +26,13 @@ public class ScoreHandler : MonoBehaviour
 
     private void Print()
     {
-        _overallScore = GetOverallScore();
-        print($"Максимальное количество очков: {_overallScore}");
+        print($"Максимальное количество очков: {GetOverallScore()}");
     }
 
     public int GetOverallScore()
     {
-        return FindAnyObjectByType<ScoreComponent>().GetScore();
+        _overallScore = FindAnyObjectByType<ScoreComponent>().GetScore();
+        return _overallScore;
     }
 
     public void AddScore(int scoreValue)
@@ -45,5 +45,9 @@ public class ScoreHandler : MonoBehaviour
     public int GetCurrentScore()
     {
         return _currentScore;
+    }
+    public int GetMaxScore()
+    {
+        return _overallScore;
     }
 }

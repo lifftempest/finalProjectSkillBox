@@ -31,11 +31,11 @@ public class AttackerHandler: MonoBehaviour
         }
     }
 
-    private void ExecuteShooting(AudioClip shootClip, AudioClip emptyMagazine)
+    private void ExecuteShooting(AudioClip shootClip, AudioClip emptyMagazine, ref bool isShooting)
     {
-        if (_currentMagazineSize > 0)
+        if (_currentDelayTime <= 0)
         {
-            if (_currentDelayTime <= 0)
+            if (_currentMagazineSize > 0)
             {
                 var bullet = _bulletPool.GetBullet();
                 bullet.gameObject.transform.position = _firePosition.position;
@@ -43,16 +43,18 @@ public class AttackerHandler: MonoBehaviour
                 bullet.SetActive(true);
                 bullet.GetComponent<BulletBehaviour>().FireBullet(_firePosition);
                 AudioHandler.Instance.PlaySfx(shootClip);
+                isShooting = true;
 
                 _currentDelayTime = _shootDelay;
                 _currentMagazineSize--;
                 OnShoot?.Invoke(_currentMagazineSize);
             }
-        }
-        if (_currentMagazineSize <= 0 && _currentDelayTime <= 0)
-        {
-            AudioHandler.Instance.PlaySfx(emptyMagazine);
-            _currentDelayTime = _shootDelay;
+            if (_currentMagazineSize <= 0)
+            {
+                AudioHandler.Instance.PlaySfx(emptyMagazine);
+                _currentDelayTime = _shootDelay;
+                isShooting = false;
+            }
         }
     }
 
@@ -62,12 +64,11 @@ public class AttackerHandler: MonoBehaviour
         OnShoot?.Invoke(_currentMagazineSize);
     }
 
-    public void Shoot(bool isShootButtonPressed, out bool isShooting, AudioClip shootClip, AudioClip emptyMagazine)
+    public void Shoot(bool isShootButtonPressed, ref bool isShooting, AudioClip shootClip, AudioClip emptyMagazine)
     {
         if (isShootButtonPressed)
         {
-            ExecuteShooting(shootClip, emptyMagazine);
-            isShooting = true;
+            ExecuteShooting(shootClip, emptyMagazine, ref isShooting);
         }
         else
         {

@@ -90,7 +90,7 @@ public class PlayerController : MonoBehaviour
 
     private void Shoot()
     {
-        _attackerHandler.Shoot(_inputHandler.AttackButtonPressed, out _isShooting, _playerAudioHandler.FireClip, _playerAudioHandler.EmptyMagazineClickClip);
+        _attackerHandler.Shoot(_inputHandler.AttackButtonPressed, ref _isShooting, _playerAudioHandler.FireClip, _playerAudioHandler.EmptyMagazineClickClip);
     }
 
     public IEnumerator ExecutePushPlayer(Transform firePosition, float lauchAngle, float launchPower)
@@ -130,6 +130,8 @@ public class PlayerController : MonoBehaviour
         _interactionHandler.enabled = false;
         _healthComponent.enabled = false;
         _animatorHandler.SetDeathTrigger();
+        this.enabled = false;
         EventManager.InvokePlayerDeathEvents();
+        
     }
 }
